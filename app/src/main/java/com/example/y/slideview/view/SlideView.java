@@ -4,14 +4,10 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PixelFormat;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.example.y.slideview.R;
@@ -30,7 +26,9 @@ public class SlideView extends View {
 
     private Paint mPaint;
 
+
     private TextView promptBox;
+
 
     private boolean isTouch = false;
 
@@ -50,12 +48,16 @@ public class SlideView extends View {
         init();
     }
 
+    public void setPromptBox(TextView promptBox) {
+        this.promptBox = promptBox;
+    }
+
     private void init() {
-        initPromptBox();
+//        initPromptBox();
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setColor(Color.GRAY);
-        mPaint.setTextSize(40);
+        mPaint.setTextSize(getResources().getDimension(R.dimen.slideview_text_size));
         mPaint.setTextAlign(Paint.Align.CENTER);
         mark = new String[]{"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "#"};
     }
@@ -64,20 +66,20 @@ public class SlideView extends View {
         this.listener = onTouchListener;
     }
 
-    private void initPromptBox() {
-        promptBox = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.index_box_layout, null);
-        promptBox.setTextSize(50);
-        promptBox.setTextColor(Color.WHITE);
-        promptBox.setGravity(Gravity.CENTER);
-        WindowManager.LayoutParams layoutParams =
-                new WindowManager.LayoutParams(200, 200,
-                        WindowManager.LayoutParams.TYPE_APPLICATION,
-                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
-                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-                        PixelFormat.TRANSLUCENT);
-        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
-        windowManager.addView(promptBox, layoutParams);
-    }
+//    private void initPromptBox() {
+//        promptBox = (TextView) LayoutInflater.from(getContext()).inflate(R.layout.index_box_layout, null);
+//        promptBox.setTextSize(50);
+//        promptBox.setTextColor(Color.WHITE);
+//        promptBox.setGravity(Gravity.CENTER);
+//        WindowManager.LayoutParams layoutParams =
+//                new WindowManager.LayoutParams(200, 200,
+//                        WindowManager.LayoutParams.TYPE_APPLICATION,
+//                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE |
+//                                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+//                        PixelFormat.TRANSLUCENT);
+//        WindowManager windowManager = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+//        windowManager.addView(promptBox, layoutParams);
+//    }
 
 
     @Override
@@ -107,35 +109,33 @@ public class SlideView extends View {
         if (letter < 0 || letter > mark.length - 1) {
             isTouch = false;
             invalidate();
-            promptBox.setVisibility(GONE);
+            if (promptBox != null) {
+                promptBox.setVisibility(GONE);
+            }
             return false;
         }
 
         switch (event.getAction()) {
 
             case MotionEvent.ACTION_MOVE:
-
-                isTouch = true;
-                touchIndex(letter);
-
-                Log.i(TAG, "dispatchTouchEvent -- >  ACTION_MOVE    ===    " + mark[letter]);
-
-                break;
-
             case MotionEvent.ACTION_DOWN:
 
                 isTouch = true;
                 touchIndex(letter);
-
-                Log.i(TAG, "dispatchTouchEvent -- >  ACTION_DOWN    ===    " + mark[letter]);
-
+                if (promptBox != null) {
+                    promptBox.setVisibility(VISIBLE);
+                    promptBox.setText(mark[letter]);
+                }
+                Log.i(TAG, "dispatchTouchEvent -- >   " + mark[letter]);
                 break;
 
             case MotionEvent.ACTION_UP:
 
                 isTouch = false;
-                promptBox.setVisibility(GONE);
-
+                if (promptBox != null) {
+                    promptBox.setText(mark[letter]);
+                    promptBox.setVisibility(GONE);
+                }
                 break;
         }
 

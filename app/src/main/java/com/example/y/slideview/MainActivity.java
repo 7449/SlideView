@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.widget.TextView;
 
 import com.example.y.slideview.view.SlideView;
 
@@ -24,6 +25,9 @@ public class MainActivity extends AppCompatActivity implements SlideView.OnTouch
         setContentView(R.layout.activity_main);
         view = (SlideView) findViewById(R.id.slide);
         recyclerView = (RecyclerView) findViewById(R.id.recycler);
+
+        view.setPromptBox((TextView) findViewById(R.id.tv_box));
+
         assert view != null;
         assert recyclerView != null;
         init();
@@ -45,7 +49,8 @@ public class MainActivity extends AppCompatActivity implements SlideView.OnTouch
     public void onTouch(String letter) {
         for (int i = 0; i < data.size(); i++) {
             if (letter.equals(data.get(i))) {
-                moveToPosition(i);
+//                moveToPosition(i);
+                linearLayoutManager.scrollToPositionWithOffset(i, 0);
 //                smoothMoveToPosition(i);
             }
         }

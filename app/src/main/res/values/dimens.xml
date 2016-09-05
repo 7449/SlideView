@@ -2,4 +2,5 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin" tools:ignore="UnusedResources">16dp</dimen>
     <dimen name="activity_vertical_margin" tools:ignore="UnusedResources">16dp</dimen>
+    <dimen name="slideview_text_size">14sp</dimen>
 </resources>
