@@ -119,21 +119,14 @@ public class SlideView extends View {
 
             case MotionEvent.ACTION_MOVE:
             case MotionEvent.ACTION_DOWN:
-
                 isTouch = true;
                 touchIndex(letter);
-                if (promptBox != null) {
-                    promptBox.setVisibility(VISIBLE);
-                    promptBox.setText(mark[letter]);
-                }
                 Log.i(TAG, "dispatchTouchEvent -- >   " + mark[letter]);
                 break;
 
             case MotionEvent.ACTION_UP:
-
                 isTouch = false;
                 if (promptBox != null) {
-                    promptBox.setText(mark[letter]);
                     promptBox.setVisibility(GONE);
                 }
                 break;
@@ -146,11 +139,11 @@ public class SlideView extends View {
     private void touchIndex(int letter) {
 
         if (letter >= 0 && letter < mark.length) {
-
             listener.onTouch(mark[letter]);
-            promptBox.setVisibility(VISIBLE);
-            promptBox.setText(mark[letter]);
-
+            if (promptBox != null) {
+                promptBox.setVisibility(VISIBLE);
+                promptBox.setText(mark[letter]);
+            }
         }
 
     }
